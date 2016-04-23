@@ -1,21 +1,65 @@
 package com.ccsit.abdulkader.movielist;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.RadioButton;
+import android.widget.Toast;
+
+import com.ccsit.abdulkader.movielist.api.MoviesApi;
+import com.ccsit.abdulkader.movielist.api.MoviesListResponse;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+
+    private MoviesApi api;
+    public String API_KEY = "528fc2f04b8ef92ed14e8957796f81ad";
+    private List<MoviesListResponse.Result> moviesList;
+    private GridView gridView;
+
+    private static int selected = 0;
+
+    private static final String ORDINARY_TYPE = "discover";
+    private static final String SORT_TYPE = "movie";
+
+    private static final String ORDINARY_SORT = "movie";
+    private static final String POPULAR_SORT = "popular";
+    private static final String TOP_RATED_SORT = "top_rated";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
+        gridView = (GridView) findViewById(R.id.movies_grid);
 
+        // Building the rest adapter for the API interface
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.themoviedb.org/3/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        api = retrofit.create(MoviesApi.class);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        getMovieList(ORDINARY_TYPE, ORDINARY_SORT);
     }
 
     @Override
@@ -33,10 +77,71 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sort) {
+            // custom dialog
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.sort_dialog);
+            // Custom Android Alert Dialog Title
+            dialog.setTitle("Sort by:");
+
+            Button dialogButtonCancel = (Button) dialog.findViewById(R.id.customDialogCancel);
+            Button dialogButtonOk = (Button) dialog.findViewById(R.id.customDialogOk);
+            final RadioButton radioButtonPopularity = (RadioButton) dialog.findViewById(R.id.radio_popularity);
+            final RadioButton radioButtonTopRated = (RadioButton) dialog.findViewById(R.id.radio_top_rated);
+
+            if (selected == 1) {
+                radioButtonPopularity.setChecked(true);
+            } else if (selected == 2) {
+                radioButtonTopRated.setChecked(true);
+            }
+
+            // Click cancel to dismiss android custom dialog box
+            dialogButtonCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+
+            // Action for custom dialog ok button click
+            dialogButtonOk.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (radioButtonPopularity.isChecked()) {
+                        selected = 1;
+                        getMovieList(SORT_TYPE, POPULAR_SORT);
+                    } else if (radioButtonTopRated.isChecked()) {
+                        selected = 2;
+                        getMovieList(SORT_TYPE, TOP_RATED_SORT);
+                    }
+
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getMovieList(String type, String sortBy) {
+        if (ConnectionChecking.isConnected(this)) {
+                Call<MoviesListResponse> call = api.getMovies(type, sortBy, API_KEY);
+                call.enqueue(new Callback<MoviesListResponse>() {
+                    @Override
+                    public void onResponse(Call<MoviesListResponse> call, Response<MoviesListResponse> response) {
+                        moviesList = response.body().getResults();
+                        gridView.setAdapter(new MovieAdapter(MainActivity.this, moviesList));
+                    }
+
+                    @Override
+                    public void onFailure(Call<MoviesListResponse> call, Throwable t) {
+                        Log.e("Failed ", t.toString());
+                    }
+                });
+        } else {
+            Toast.makeText(this, ConnectionChecking.NO_CONNECTION, Toast.LENGTH_LONG).show();
+        }
     }
 }

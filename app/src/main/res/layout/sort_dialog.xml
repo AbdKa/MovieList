@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/sort_dialog_radio_margin"
+        android:layout_marginLeft="@dimen/sort_dialog_radio_margin">
+        <RadioButton
+            android:id="@+id/radio_popularity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/popular_sort_radio"/>
+        <RadioButton
+            android:id="@+id/radio_top_rated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/popular_sort_top_rated_radio"/>
+    </RadioGroup>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/customDialogOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/sort_dialog_button_margin"
+            android:text="OK"/>
+
+        <Button
+            android:id="@+id/customDialogCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/sort_dialog_button_margin"
+            android:text="Cancel"/>
+    </RelativeLayout>
+</LinearLayout>
