@@ -8,13 +8,33 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <!--<style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>-->
+
+    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>-->
+
+    <!-- Details Activity -->
+    <style name="title_tv">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="rate_and_date_tv">
+        <item name="android:textSize">25sp</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="release_date_tv">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="overview_tv">
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
 
 </resources>

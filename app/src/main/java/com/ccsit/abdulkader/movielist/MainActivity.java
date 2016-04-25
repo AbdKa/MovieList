@@ -1,12 +1,14 @@
 package com.ccsit.abdulkader.movielist;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RadioButton;
@@ -14,6 +16,9 @@ import android.widget.Toast;
 
 import com.ccsit.abdulkader.movielist.api.MoviesApi;
 import com.ccsit.abdulkader.movielist.api.MoviesListResponse;
+import com.ccsit.abdulkader.movielist.utils.ConnectionChecking;
+import com.ccsit.abdulkader.movielist.utils.MovieAdapter;
+import com.ccsit.abdulkader.movielist.utils.Values;
 
 import java.util.List;
 
@@ -26,7 +31,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private MoviesApi api;
-    public String API_KEY = "528fc2f04b8ef92ed14e8957796f81ad";
     private List<MoviesListResponse.Result> moviesList;
     private GridView gridView;
 
@@ -53,13 +57,23 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(MoviesApi.class);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         getMovieList(ORDINARY_TYPE, ORDINARY_SORT);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("title", moviesList.get(position).getTitle());
+                bundle.putString("posterPath", moviesList.get(position).getPosterPath());
+                bundle.putFloat("rate", moviesList.get(position).getVoteAverage());
+                bundle.putString("releaseDate", moviesList.get(position).getReleaseDate());
+                bundle.putString("overview", moviesList.get(position).getOverview());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -127,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getMovieList(String type, String sortBy) {
         if (ConnectionChecking.isConnected(this)) {
-                Call<MoviesListResponse> call = api.getMovies(type, sortBy, API_KEY);
+                Call<MoviesListResponse> call = api.getMovies(type, sortBy, Values.API_KEY);
                 call.enqueue(new Callback<MoviesListResponse>() {
                     @Override
                     public void onResponse(Call<MoviesListResponse> call, Response<MoviesListResponse> response) {

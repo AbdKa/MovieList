@@ -34,7 +34,7 @@ public class MoviesListResponse {
         @SerializedName("title")
         private String title;
         @SerializedName("vote_average")
-        private Double voteAverage;
+        private float voteAverage;
 
         /**
          *
@@ -86,7 +86,7 @@ public class MoviesListResponse {
          * @return
          * The voteAverage
          */
-        public Double getVoteAverage() {
+        public float getVoteAverage() {
             return voteAverage;
         }
     }

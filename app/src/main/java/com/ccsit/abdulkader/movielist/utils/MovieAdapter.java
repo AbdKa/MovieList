@@ -1,4 +1,4 @@
-package com.ccsit.abdulkader.movielist;
+package com.ccsit.abdulkader.movielist.utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.ccsit.abdulkader.movielist.R;
 import com.ccsit.abdulkader.movielist.api.MoviesListResponse;
 import com.squareup.picasso.Picasso;
 
@@ -17,9 +18,6 @@ import java.util.List;
  * Adapt the movies posters in the grid view
  */
 public class MovieAdapter extends ArrayAdapter<MoviesListResponse.Result> {
-
-    private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
-    private static final String IMAGE_SIZE = "w185";
 
     public MovieAdapter(Context context, List<MoviesListResponse.Result> moviesList) {
         super(context, 0, moviesList);
@@ -42,8 +40,9 @@ public class MovieAdapter extends ArrayAdapter<MoviesListResponse.Result> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         // Populate the data into the template view using the data object
-        Picasso.with(getContext()).load(BASE_IMAGE_URL + IMAGE_SIZE + result.getPosterPath())
-                .placeholder(R.mipmap.ic_launcher)
+        Picasso.with(getContext())
+                .load(Values.BASE_IMAGE_URL + Values.POSTER_SIZE_MAIN + result.getPosterPath())
+                .placeholder(R.drawable.placeholder)
                 .into(viewHolder.imageView);
         // Return the completed view to render on screen
         return convertView;

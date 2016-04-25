@@ -1,4 +1,4 @@
-package com.ccsit.abdulkader.movielist;
+package com.ccsit.abdulkader.movielist.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

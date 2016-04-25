@@ -4,4 +4,12 @@
     <dimen name="poster_layout_margin">10dp</dimen>
     <dimen name="sort_dialog_button_margin">50dp</dimen>
     <dimen name="sort_dialog_radio_margin">15dp</dimen>
+
+    <!-- Details activity -->
+    <dimen name="title_margin">15dp</dimen>
+    <dimen name="right_linear_margin">10dp</dimen>
+    <dimen name="rate_linear_top_margin">10dp</dimen>
+    <dimen name="rate_image_width_height">35dp</dimen>
+    <dimen name="rate_image_margin">10dp</dimen>
+    <dimen name="release_date_top_top_margin">10dp</dimen>
 </resources>
