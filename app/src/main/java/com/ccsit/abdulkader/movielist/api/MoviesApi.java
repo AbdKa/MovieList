@@ -15,9 +15,8 @@ public interface MoviesApi {
      * This method used to get the list of movies from TheMovieDb
      * @param apiKey for authentication
      */
-    @GET("{type}/{sort}")
+    @GET("movie/{sort}")
     Call<MoviesListResponse> getMovies(
-            @Path("type") String type,
             @Path("sort") String sort,
             @Query("api_key") String apiKey
     );

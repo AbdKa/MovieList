@@ -36,10 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static int selected = 0;
 
-    private static final String ORDINARY_TYPE = "discover";
-    private static final String SORT_TYPE = "movie";
-
-    private static final String ORDINARY_SORT = "movie";
     private static final String POPULAR_SORT = "popular";
     private static final String TOP_RATED_SORT = "top_rated";
 
@@ -58,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         api = retrofit.create(MoviesApi.class);
 
-        getMovieList(ORDINARY_TYPE, ORDINARY_SORT);
+        getMovieList(POPULAR_SORT);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
             final RadioButton radioButtonPopularity = (RadioButton) dialog.findViewById(R.id.radio_popularity);
             final RadioButton radioButtonTopRated = (RadioButton) dialog.findViewById(R.id.radio_top_rated);
 
-            if (selected == 1) {
+            if (selected == 0) {
                 radioButtonPopularity.setChecked(true);
-            } else if (selected == 2) {
+            } else if (selected == 1) {
                 radioButtonTopRated.setChecked(true);
             }
 
@@ -122,11 +118,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (radioButtonPopularity.isChecked()) {
-                        selected = 1;
-                        getMovieList(SORT_TYPE, POPULAR_SORT);
+                        selected = 0;
+                        getMovieList(POPULAR_SORT);
                     } else if (radioButtonTopRated.isChecked()) {
-                        selected = 2;
-                        getMovieList(SORT_TYPE, TOP_RATED_SORT);
+                        selected = 1;
+                        getMovieList(TOP_RATED_SORT);
                     }
 
                     dialog.dismiss();
@@ -139,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getMovieList(String type, String sortBy) {
+    private void getMovieList(String sortBy) {
         if (ConnectionChecking.isConnected(this)) {
-                Call<MoviesListResponse> call = api.getMovies(type, sortBy, Values.API_KEY);
+                Call<MoviesListResponse> call = api.getMovies(sortBy, Values.API_KEY);
                 call.enqueue(new Callback<MoviesListResponse>() {
                     @Override
                     public void onResponse(Call<MoviesListResponse> call, Response<MoviesListResponse> response) {
