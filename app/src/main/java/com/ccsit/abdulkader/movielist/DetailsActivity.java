@@ -8,24 +8,27 @@ import android.widget.TextView;
 import com.ccsit.abdulkader.movielist.utils.Values;
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Abdul Kader on 4/25/2016.
  * This is the activity_details activity after the user selection
  */
 public class DetailsActivity extends AppCompatActivity {
-    private TextView titleTv, rateTv, releaseDateTv, overviewTv;
-    private ImageView poster;
+
+    @BindView(R.id.movie_title_tv) TextView titleTv;
+    @BindView(R.id.rate_tv) TextView rateTv;
+    @BindView(R.id.release_date_tv) TextView releaseDateTv;
+    @BindView(R.id.overview_tv) TextView overviewTv;
+    @BindView(R.id.poster_img) ImageView poster;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        
-        titleTv = (TextView) findViewById(R.id.movie_title_tv);
-        rateTv = (TextView) findViewById(R.id.rate_tv);
-        releaseDateTv = (TextView) findViewById(R.id.release_date_tv);
-        overviewTv = (TextView) findViewById(R.id.overview_tv);
-        poster = (ImageView) findViewById(R.id.poster_img);
+
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -40,6 +43,7 @@ public class DetailsActivity extends AppCompatActivity {
         Picasso.with(this)
                 .load(Values.BASE_IMAGE_URL + Values.POSTER_SIZE_DETAILS + bundle.getString("posterPath"))
                 .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
                 .into(poster);
     }
 }
